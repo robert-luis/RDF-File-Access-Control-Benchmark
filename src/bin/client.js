@@ -20,7 +20,7 @@ requestHandler(source, webid, query).then(res => {
 
 // Request handler function
 async function requestHandler(url, webid, query) {
-    const newSource = await enforceAC(source, webid, query)
+    const newSource = await enforceAC(source, webid, query);
     if (newSource.length > 0) {
         console.log(newSource)
         const results = await executeQuery(query, source);
@@ -51,12 +51,10 @@ async function executeQuery(query, source) {
     const sources = [
         { type: "file", value: source },
     ];
-    console.log('try\n')
     const result = await engine.query(query, { sources });
     const results = [];
     result.bindingsStream.on('data', data => {
         results.push(data.get('?o').value);
-        console.log('try\n')
     });
     return new Promise(resolve => {
         result.bindingsStream.on('end', () => {

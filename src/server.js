@@ -20,11 +20,7 @@ app.use(express.json())
 // PARAMS: '/*(:path)?'
 app.post('/*', (req, res) => {
     //res.set('content-type', 'text/plain; charset=utf-8');
-    var c = 0
     if (req.body.hasOwnProperty('webid') && req.body.hasOwnProperty('query'))  {
-        c += 1;
-        console.log(c)
-        console.log(req.body.hasOwnProperty('webid'))
         resData = checkAP(req).then(result => {
             res.json({
                 input: req.body,
@@ -52,10 +48,11 @@ app.post('/*', (req, res) => {
 // AC-Interface
 async function checkAP(req) {
     // ToDo: Retrieve full url
-    const source = path + '/src/data' + req.url;    
+    const source = path + '/data' + req.url;    
     const newSource = getNewPath(source);
     const baseIRI = `http://localhost:${port}` + req.url; 
     const newbaseIRI = getNewPath(baseIRI);
+    console.log(baseIRI)
     const webid = req.body.webid;
     const query = req.body.query;
     console.log(path)
