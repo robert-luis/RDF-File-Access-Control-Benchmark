@@ -1,0 +1,73 @@
+@prefix : <#>.
+@prefix acl: <http://www.w3.org/ns/auth/acl#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix ppo: <http://vocab.deri.ie/ppo#>. 
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>. #!
+@prefix sioc: <http://rdfs.org/sioc/ns#>.
+@prefix sioct: <http://rdfs.org/sioc/types#>.
+
+
+:G1ACL {
+
+:acl1
+    acl:mode acl:Read;
+    acl:mode acl:Write;
+    acl:agent :me;
+    #acl:accessTo :s, :p, :o, :g.
+    ppo:appliesToNamedGraph :G1;
+    acl:accessTo foaf:name.
+
+:acl2
+    acl:mode acl:Read;
+    acl:agent :me;
+    ppo:appliesToNamedGraph :MB.
+
+:acl3
+    acl:mode acl:Read;
+    acl:agent :someone_else;
+    acl:accessTo :G1;
+    acl:accessTo foaf:name.
+}
+
+#:GPPO {
+#:ppo1 
+#    a ppo:PrivacyPreference;
+#    ppo:assignAccess acl:Read;
+#    ppo:appliesToNamedGraph :G1.
+# }
+
+
+:G1 {
+:me a foaf:Person;
+    foaf:name 'Person1';
+    foaf:knows <http://localhost:8080/person1/profile/card.ttl#me>;
+    foaf:knows <http://localhost:8080/person2/profile/card.ttl#me>;
+    foaf:knows _:a;
+    sioc:UserAccount :user1.
+
+
+:user1
+    sioc:creator_of :post0;
+    sioc:creator_of :post1;
+    sioc:creator_of :post2;
+    sioct:Microblog <http://localhost:8080/person1/profile/microblog>.
+}
+
+:MB {
+
+:post0
+    a sioct:MicroblogPost;
+    sioc:content 'Lorem Ipsum0';
+    sioc:has_container <http://localhost:8080/person1/profile/microblog>.
+
+:post1
+    a sioct:MicroblogPost;
+    sioc:content "Lorem Ipsum1";
+    sioc:has_container <http://localhost:8080/person1/profile/microblog>.
+
+:post2
+    a sioct:MicroblogPost;
+    sioc:content "Lorem Ipsum0";
+    sioc:has_container <http://localhost:8080/person1/profile/microblog>.
+
+}

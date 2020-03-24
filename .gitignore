@@ -1,3 +1,10 @@
 src/node_modules
-!src/data/t1/t1-1/person1
-src/data
+
+src/data/*
+!src/data/t1/
+
+src/data/t1/*
+!src/data/t1/t1-1/
+
+src/data/t1/t1-1/*
+!src/data/t1/t1-1/person1/
