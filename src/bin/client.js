@@ -1,3 +1,5 @@
+// ** Client of Graph-based Access Control for RDF Files **
+
 const fetch = require('node-fetch');
 const newEngine = require('@comunica/actor-init-sparql').newEngine;
 
@@ -11,14 +13,14 @@ SELECT ?o WHERE { graph ?g {
 }`;
 
 
-// Initialising the request
+// ## Initialising the request
 requestHandler(source, webid, query).then(res => {
     console.log(res);
 })
 .catch(err=> {console.error('Error! Server is not responding \n' + err) });
 
 
-// Request handler function
+// ## Request handler function
 async function requestHandler(url, webid, query) {
     const newSource = await enforceAC(source, webid, query);
     if (newSource.length > 0) {
@@ -29,7 +31,7 @@ async function requestHandler(url, webid, query) {
     } else { return [] }
 }
 
-// Calling the AC-Interface
+// ## Calling the AC-Interface
 async function enforceAC(url, webid, query) {
     url = url;
     const data = {'webid': webid, 
@@ -63,7 +65,7 @@ async function executeQuery(query, source) {
     });
 }
 
-// Calling the cleaner on the AC-Interface
+// ## Calling the cleaner on the AC-Interface
 function callCleaner(newSource) {
     url = newSource;
     const data = {'cleaner': newSource};

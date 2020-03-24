@@ -1,4 +1,4 @@
-// ** Server of Graph-based Access Control for RDF Files**
+// ** Server of Graph-based Access Control for RDF Files **
 
 const express = require('express');
 const newEngine = require('@comunica/actor-init-sparql').newEngine;
