@@ -24,7 +24,7 @@ async function requestHandler(url, webid, query) {
     if (newSource.length > 0) {
         console.log(newSource)
         const results = await executeQuery(query, source);
-        //callCleaner(newSource)
+        callCleaner(newSource)
         return results
     } else { return [] }
 }

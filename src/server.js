@@ -1,3 +1,5 @@
+// ** Server of Graph-based Access Control for RDF Files**
+
 const express = require('express');
 const newEngine = require('@comunica/actor-init-sparql').newEngine;
 const N3 = require('n3');
@@ -11,16 +13,17 @@ const { namedNode, literal, defaultGraph, quad } = DataFactory;
 const path = process.cwd()
 var filteredFile = ''
 
-// Server application
+// ## Server application
 app.listen(port, () => console.log(`Server is running on port ${port}!`));
 app.use(express.static(path + '/data'));
 app.use(express.json())
 
-// AC-Interface
+// ## AC-Interface
 // PARAMS: '/*(:path)?'
 app.post('/*', (req, res) => {
     //res.set('content-type', 'text/plain; charset=utf-8');
     if (req.body.hasOwnProperty('webid') && req.body.hasOwnProperty('query'))  {
+        console.log('P1') // Tracking of path made by request
         resData = checkAP(req).then(result => {
             res.json({
                 input: req.body,
@@ -28,12 +31,13 @@ app.post('/*', (req, res) => {
             });
         });
     } else if (req.body.hasOwnProperty('cleaner')) {
+        console.log('P2')
         if (filteredFile.match(req.url)) {
             cleaner(filteredFile);
-            console.log('clean')
             res.send('Cleaned!');
         }
     } else {
+        console.log('P3')
         console.log(res)
         res.send('Something went wrong!');
     }
@@ -41,22 +45,14 @@ app.post('/*', (req, res) => {
 
 
 
-// *****************************
-
-
-
-// AC-Interface
+// ## AC-Interface
 async function checkAP(req) {
-    // ToDo: Retrieve full url
     const source = path + '/data' + req.url;    
     const newSource = getNewPath(source);
     const baseIRI = `http://localhost:${port}` + req.url; 
     const newbaseIRI = getNewPath(baseIRI);
-    console.log(baseIRI)
     const webid = req.body.webid;
     const query = req.body.query;
-    console.log(path)
-    console.log(req.url)
     
     //const acc = await getAccessMode(query) | currently only read supported
     //const policyQuery = await createQuery(acc) |  not necessarry anymore
@@ -76,11 +72,11 @@ async function checkAP(req) {
     }
 }
 
-// ToDo: FUNCTION getAccessMode  | Return acc | which is acl:Read
-// ToDo: FUNCTION policyQuery = createQuery(acc) | return policyQuery
+// ## ToDo: FUNCTION getAccessMode  | Return acc | which is acl:Read
+// ## ToDo: FUNCTION policyQuery = createQuery(acc) | return policyQuery
 
 
-// Parsing the auth document into a store
+// ## Parsing the auth document into a store
 function getAuthData(source, baseIRI) {
     var authStore = new N3.Store();
     const parser = new N3.Parser( { baseIRI: baseIRI } ),
@@ -94,7 +90,7 @@ function getAuthData(source, baseIRI) {
     });
 }
 
-// Creating new path for filtered source
+// ## Creating new path for filtered source
 function getNewPath(str) {
     n = str.lastIndexOf('.');
     const sign = '_filtered'
@@ -103,7 +99,7 @@ function getNewPath(str) {
     return str
 }
 
-// Querying the authorised graphs from the store
+// ## Querying the authorised graphs from the store
 async function getAuthGraphs(store, webid) {
     const engine_rdfjs = newEngine_rdfjs();
     
@@ -129,14 +125,14 @@ async function getAuthGraphs(store, webid) {
     });
 }
 
-// Writing out new filtered file
+// ## Writing out new filtered file
 function filter(source, baseIRI, authorisations, newSource) {
     var writer = new N3.Writer();
     const parser = new N3.Parser( { baseIRI: baseIRI } ),
           rdfStream = fs.createReadStream(source);
     parser.parse(rdfStream, (err, quad, prefixes) => {
         if (err) {throw err}
-        // If graph of parsed quad matches the authorisations, it is added
+        // ## If graph of parsed quad matches the authorisations, it is added
         if (quad) {
             for (auth in authorisations) {
                 if (authorisations[auth] == quad.graph.value){
@@ -144,7 +140,7 @@ function filter(source, baseIRI, authorisations, newSource) {
                 }
             }
         }
-        // Ending of the parsing and writing out
+        // ## Ending of the parsing and writing out
         else {
             writer.end((error, result) => {
                 fs.writeFile(newSource, result, err => {
@@ -159,9 +155,12 @@ function filter(source, baseIRI, authorisations, newSource) {
 }
 
 
-// Deleting filtered file 
+// ## Deleting filtered file 
 function cleaner(newSource) {
-    try {fs.unlinkSync(newSource)}
+    try {
+        fs.unlinkSync(newSource);
+        console.log(`${newSource} was removed`);
+    }
     catch(err) {console.error(`File '${source}' not found :\n` + err)}
 }
 
