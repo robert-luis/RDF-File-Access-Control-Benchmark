@@ -24,7 +24,6 @@ requestHandler(source, webid, query).then(res => {
 async function requestHandler(url, webid, query) {
     const newSource = await enforceAC(source, webid, query);
     if (newSource.length > 0) {
-        console.log(newSource)
         const results = await executeQuery(query, source);
         callCleaner(newSource)
         return results

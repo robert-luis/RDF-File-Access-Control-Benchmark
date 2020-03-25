@@ -1,0 +1,31 @@
+{
+	"data": {
+		"t1": {
+			"t1-1": {
+				"pods": 10,
+				"posts": 10,
+				"auths": 1
+			},
+            "t1-2": {
+				"pods": 10,
+				"posts": 10,
+				"auths": 2
+			},
+            "t1-3": {
+				"pods": 10,
+				"posts": 10,
+				"auths": 3
+			}
+		},
+		"t2": {
+			"t2-1": {
+				"pods": 10,
+				"posts": 10,
+				"auths": 1
+			}
+		}
+	},
+    "port": 8080,
+    "runs": 3,
+    "queries": ".."
+}
