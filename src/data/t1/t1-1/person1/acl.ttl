@@ -1,0 +1,19 @@
+@prefix : <#>.
+@prefix acl: <http://www.w3.org/ns/auth/acl#>.
+@prefix ppo: <http://vocab.deri.ie/ppo#>.
+
+:aclGraph {
+:acl1 a acl:Authorization;
+    acl:mode acl:Read;
+    acl:agent <http://localhost:8080/t1/t1-1/person0/profile.ttl#me>;
+    acl:agent <http://localhost:8080/t1/t1-1/person1/profile.ttl#me>;
+    acl:agent <http://localhost:8080/t1/t1-1/person2/profile.ttl#me>;
+    acl:agent <http://localhost:8080/t1/t1-1/person3/profile.ttl#me>;
+    acl:agent <http://localhost:8080/t1/t1-1/person4/profile.ttl#me>;
+    acl:agent <http://localhost:8080/t1/t1-1/person5/profile.ttl#me>;
+    acl:agent <http://localhost:8080/t1/t1-1/person6/profile.ttl#me>;
+    acl:agent <http://localhost:8080/t1/t1-1/person7/profile.ttl#me>;
+    acl:agent <http://localhost:8080/t1/t1-1/person8/profile.ttl#me>;
+    acl:agent <http://localhost:8080/t1/t1-1/person9/profile.ttl#me>;
+    ppo:appliesToNamedGraph <http://localhost:8080/t1/t1-1/person1/profile.ttl#Card>.
+}

@@ -1,4 +1,5 @@
 src/node_modules
+.ipynb_checkpoints
 
 src/data/*
 !src/data/t1/

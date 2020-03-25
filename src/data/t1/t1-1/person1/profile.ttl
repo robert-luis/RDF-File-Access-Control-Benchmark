@@ -1,0 +1,92 @@
+@prefix : <#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix dct:  <http://purl.org/dc/terms/>.
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix sioc: <http://rdfs.org/sioc/ns#>.
+@prefix sioct: <http://rdfs.org/sioc/types#>.
+
+:Card {
+:me a foaf:Person;
+    foaf:name 'Person1';
+    foaf:knows <http://localhost:8080/t1/t1-1/person0/profile.ttl#me>;
+    foaf:knows <http://localhost:8080/t1/t1-1/person1/profile.ttl#me>;
+    foaf:knows <http://localhost:8080/t1/t1-1/person2/profile.ttl#me>;
+    foaf:knows <http://localhost:8080/t1/t1-1/person3/profile.ttl#me>;
+    foaf:knows <http://localhost:8080/t1/t1-1/person4/profile.ttl#me>;
+    foaf:knows <http://localhost:8080/t1/t1-1/person5/profile.ttl#me>;
+    foaf:knows <http://localhost:8080/t1/t1-1/person6/profile.ttl#me>;
+    foaf:knows <http://localhost:8080/t1/t1-1/person7/profile.ttl#me>;
+    foaf:knows <http://localhost:8080/t1/t1-1/person8/profile.ttl#me>;
+    foaf:knows <http://localhost:8080/t1/t1-1/person9/profile.ttl#me>;
+    sioc:UserAccount :user1.
+
+:user1
+    sioc:creator_of :post0;
+    sioc:creator_of :post1;
+    sioc:creator_of :post2;
+    sioc:creator_of :post3;
+    sioc:creator_of :post4;
+    sioc:creator_of :post5;
+    sioc:creator_of :post6;
+    sioc:creator_of :post7;
+    sioc:creator_of :post8;
+    sioc:creator_of :post9;
+    sioct:Microblog :MbPrivate;
+    sioct:Microblog :MbOfficial.
+}
+
+:MbPrivate {
+:post0
+    a sioct:MicroblogPost;
+    sioc:content "Lorem Ipsum";
+    dct:created "2020-01-01";
+    sioc:topic <http://example.org/topics/hcls>.
+:post1
+    a sioct:MicroblogPost;
+    sioc:content "Lorem Ipsum";
+    dct:created "2020-01-01";
+    sioc:topic <http://example.org/topics/hcls>.
+:post2
+    a sioct:MicroblogPost;
+    sioc:content "Lorem Ipsum";
+    dct:created "2020-01-01";
+    sioc:topic <http://example.org/topics/hcls>.
+:post3
+    a sioct:MicroblogPost;
+    sioc:content "Lorem Ipsum";
+    dct:created "2020-01-01";
+    sioc:topic <http://example.org/topics/hcls>.
+:post4
+    a sioct:MicroblogPost;
+    sioc:content "Lorem Ipsum";
+    dct:created "2020-01-01";
+    sioc:topic <http://example.org/topics/hcls>.
+}
+
+:MbOfficial {
+:post5
+    a sioct:MicroblogPost;
+    sioc:content "Lorem Ipsum";
+    dct:created "2020-01-01";
+    sioc:topic <http://example.org/topics/hcls>.
+:post6
+    a sioct:MicroblogPost;
+    sioc:content "Lorem Ipsum";
+    dct:created "2020-01-01";
+    sioc:topic <http://example.org/topics/hcls>.
+:post7
+    a sioct:MicroblogPost;
+    sioc:content "Lorem Ipsum";
+    dct:created "2020-01-01";
+    sioc:topic <http://example.org/topics/hcls>.
+:post8
+    a sioct:MicroblogPost;
+    sioc:content "Lorem Ipsum";
+    dct:created "2020-01-01";
+    sioc:topic <http://example.org/topics/hcls>.
+:post9
+    a sioct:MicroblogPost;
+    sioc:content "Lorem Ipsum";
+    dct:created "2020-01-01";
+    sioc:topic <http://example.org/topics/hcls>.
+}

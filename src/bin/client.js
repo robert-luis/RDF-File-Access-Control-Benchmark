@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 const newEngine = require('@comunica/actor-init-sparql').newEngine;
 
 //Input variables  ->   process.argv[2]
-const source = "http://localhost:8080/t1/t1-1/person1/profile/card.ttl"
+const source = "http://localhost:8080/t1/t1-1/person1/profile.ttl"
 const webid = source + '#me'
 const query = `
 PREFIX foaf: <http://xmlns.com/foaf/0.1/> 

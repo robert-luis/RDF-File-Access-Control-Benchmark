@@ -5,6 +5,7 @@ const newEngine = require('@comunica/actor-init-sparql').newEngine;
 const N3 = require('n3');
 const fs = require('fs');
 const newEngine_rdfjs = require('@comunica/actor-init-sparql-rdfjs').newEngine;
+const glob = require('glob');
 
 const app = express();
 const port = 8080;
@@ -47,18 +48,20 @@ app.post('/*', (req, res) => {
 
 // ## AC-Interface
 async function checkAP(req) {
-    const source = path + '/data' + req.url;    
+    const source = path + '/data' + req.url;
     const newSource = getNewPath(source);
     const baseIRI = `http://localhost:${port}` + req.url; 
     const newbaseIRI = getNewPath(baseIRI);
     const webid = req.body.webid;
     const query = req.body.query;
     
+    const aclSource = await getAclSource(source);
+    
     //const acc = await getAccessMode(query) | currently only read supported
     //const policyQuery = await createQuery(acc) |  not necessarry anymore
     
     // Storing the policy document in a memory store
-    authStore = await getAuthData(source, baseIRI);
+    authStore = await getAuthData(aclSource, baseIRI);
     
     // Retrieving the authorised named graphs depending on read access and requester's webid
     authorisations = await getAuthGraphs(authStore, webid);
@@ -75,6 +78,29 @@ async function checkAP(req) {
 // ## ToDo: FUNCTION getAccessMode  | Return acc | which is acl:Read
 // ## ToDo: FUNCTION policyQuery = createQuery(acc) | return policyQuery
 
+// ## Creating new path for filtered source
+function getNewPath(str) {
+    n = str.lastIndexOf('.');
+    const sign = '_filtered'
+    if (n > -1) {str = str.slice(0, n) + sign + str.slice(n)}
+    else {str += sign}
+    return str
+}
+
+// ## Retrieving the respectice acl file for the requested source
+function getAclSource(source) {
+    dir = source.slice(0, source.lastIndexOf('/') + 1);
+    options = {cwd: dir};
+    return new Promise((resolve, reject) => {
+        glob("*acl.ttl", options, function(err, doc) {
+            if (err) {
+                console.log('ACL file not found. ' + err);
+                return;
+            }
+            else {resolve(dir + doc[0]);}
+        });
+    });
+}
 
 // ## Parsing the auth document into a store
 function getAuthData(source, baseIRI) {
@@ -90,28 +116,28 @@ function getAuthData(source, baseIRI) {
     });
 }
 
-// ## Creating new path for filtered source
-function getNewPath(str) {
-    n = str.lastIndexOf('.');
-    const sign = '_filtered'
-    if (n > -1) {str = str.slice(0, n) + sign + str.slice(n)}
-    else {str += sign}
-    return str
-}
-
 // ## Querying the authorised graphs from the store
 async function getAuthGraphs(store, webid) {
     const engine_rdfjs = newEngine_rdfjs();
     
     // ToDo: Match access mode Read against query
+//    const authQuery = `
+//    PREFIX acl: <http://www.w3.org/ns/auth/acl#>
+//    PREFIX ppo: <http://vocab.deri.ie/ppo#>
+//    SELECT ?o WHERE {GRAPH ?g {
+//        ?s acl:mode acl:Read.
+//        ?s acl:agent <${webid}>.
+//        ?s ppo:appliesToNamedGraph ?o.
+//    }}`;
+
     const authQuery = `
     PREFIX acl: <http://www.w3.org/ns/auth/acl#>
     PREFIX ppo: <http://vocab.deri.ie/ppo#>
     SELECT ?o WHERE {GRAPH ?g {
         ?s acl:mode acl:Read.
-        ?s acl:agent <${webid}>.
         ?s ppo:appliesToNamedGraph ?o.
     }}`;
+ 
  
     const authGraphs = []
     const result = await engine_rdfjs.query(authQuery, { sources: [ { type: 'rdfjsSource', value: store } ] });
@@ -154,7 +180,6 @@ function filter(source, baseIRI, authorisations, newSource) {
     });
 }
 
-
 // ## Deleting filtered file 
 function cleaner(newSource) {
     try {
@@ -163,5 +188,4 @@ function cleaner(newSource) {
     }
     catch(err) {console.error(`File '${source}' not found :\n` + err)}
 }
-
 
