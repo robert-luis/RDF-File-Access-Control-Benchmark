@@ -3,16 +3,6 @@
 const fetch = require('node-fetch');
 const newEngine = require('@comunica/actor-init-sparql').newEngine;
 
-//Input variables  ->   process.argv[2]
-//const source = "http://localhost:8080/t1/t1-1/person1/profile.ttl"
-//const webid = source + '#me'
-//const query = `
-//PREFIX foaf: <http://xmlns.com/foaf/0.1/> 
-//SELECT ?o WHERE { graph ?g {
-//    ?s foaf:knows ?o. }
-//}`;
-
-
 //// ## Initialising the request
 //requestHandler(source, webid, query).then(res => {
 //    console.log(res);
@@ -21,15 +11,42 @@ const newEngine = require('@comunica/actor-init-sparql').newEngine;
 
 
 module.exports = {
-    // ## Request handler function
-    requestHandler: async function (url, webid, query) {
-        const newSource = await enforceAC(source, webid, query);
-        if (newSource.length > 0) {
-            const results = await executeQuery(query, source);
-            callCleaner(newSource)
-            return results
-        } else { return [] }
+    queryHandler: async function (source, webid, query) {
+        var results = [];
+        var int_result = await requestHandler(source, webid, query[0])
+        for (i in int_result) {
+            results.push(await requestHandler(int_result[i], webid, query[1]))
+        }
+        return results
     }
+}
+
+
+// Exporting the main function
+//module.exports = {
+//    // ## Request handler function
+//    requestHandler: async function (source, webid, query) {
+//        //console.log(test);
+//        console.log(source);
+////        console.log(webid);
+////        console.log(query);
+//        const newSource = await enforceAC(source, webid, query);
+//        if (newSource.length > 0) {
+//            const results = await executeQuery(query, source);
+//            callCleaner(newSource)
+//            return results
+//        } else { return [] }
+//    }
+//}
+
+// ## Request handler function
+async function requestHandler(source, webid, query) {
+    const newSource = await enforceAC(source, webid, query);
+    if (newSource.length > 0) {
+        const results = await executeQuery(query, source);
+        callCleaner(newSource)
+        return results
+    } else { return [] }
 }
 
 // ## Calling the AC-Interface
@@ -57,6 +74,7 @@ async function executeQuery(query, source) {
     const result = await engine.query(query, { sources });
     const results = [];
     result.bindingsStream.on('data', data => {
+        // ## given variable to retrieve instead of ?o
         results.push(data.get('?o').value);
     });
     return new Promise(resolve => {

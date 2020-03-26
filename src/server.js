@@ -1,18 +1,21 @@
 // ** Server of Graph-based Access Control for RDF Files **
-
 const express = require('express');
 const newEngine = require('@comunica/actor-init-sparql').newEngine;
 const N3 = require('n3');
 const fs = require('fs');
 const newEngine_rdfjs = require('@comunica/actor-init-sparql-rdfjs').newEngine;
 const glob = require('glob');
+const rand = require('random-seed').create();
+
+
 
 const app = express();
 const port = 8080;
 const { DataFactory } = N3;
 const { namedNode, literal, defaultGraph, quad } = DataFactory;
 const path = process.cwd()
-var filteredFile = ''
+var filteredFiles = [];     // store for logging filtered files
+rand.initState();           // seed for random number
 
 // ## Server application
 app.listen(port, () => console.log(`Server is running on port ${port}!`));
@@ -20,11 +23,9 @@ app.use(express.static(path + '/data'));
 app.use(express.json())
 
 // ## AC-Interface
-// PARAMS: '/*(:path)?'
 app.post('/*', (req, res) => {
-    //res.set('content-type', 'text/plain; charset=utf-8');
     if (req.body.hasOwnProperty('webid') && req.body.hasOwnProperty('query'))  {
-        console.log('P1') // Tracking of path made by request
+        //console.log('P1') // Tracking of path made by request
         resData = checkAP(req).then(result => {
             res.json({
                 input: req.body,
@@ -32,26 +33,31 @@ app.post('/*', (req, res) => {
             });
         });
     } else if (req.body.hasOwnProperty('cleaner')) {
-        console.log('P2')
-        if (filteredFile.match(req.url)) {
-            cleaner(filteredFile);
-            res.send('Cleaned!');
+        //console.log('P2')
+        res.send('Cleaning call received!');
+        for (i in filteredFiles){
+            // ## Check whether the requested resource was created by the filter function
+            if (filteredFiles[i].match(req.url)) {
+                 // ## Delete the file
+                setTimeout(() => cleaner(filteredFiles[i]), 1000); 
+                
+                cleaner(filteredFiles[i]);
+            }
         }
-    } else {
-        console.log('P3')
-        console.log(res)
-        res.send('Something went wrong!');
-    }
+    } else {res.send('Something went wrong!');}
 });
 
 
 
 // ## AC-Interface
 async function checkAP(req) {
+    
+    const rand_num = rand(1000000);
+    
     const source = path + '/data' + req.url;
-    const newSource = getNewPath(source);
+    const newSource = getNewPath(source, rand_num);
     const baseIRI = `http://localhost:${port}` + req.url; 
-    const newbaseIRI = getNewPath(baseIRI);
+    const newbaseIRI = getNewPath(baseIRI, rand_num);
     const webid = req.body.webid;
     const query = req.body.query;
     
@@ -79,10 +85,10 @@ async function checkAP(req) {
 // ## ToDo: FUNCTION policyQuery = createQuery(acc) | return policyQuery
 
 // ## Creating new path for filtered source
-function getNewPath(str) {
-    n = str.lastIndexOf('.');
-    const sign = '_filtered'
-    if (n > -1) {str = str.slice(0, n) + sign + str.slice(n)}
+function getNewPath(str, rand) {
+    const n = str.lastIndexOf('.');
+    const sign = '_filtered';
+    if (n > -1) {str = str.slice(0, n) + sign + rand + str.slice(n)}
     else {str += sign}
     return str
 }
@@ -171,21 +177,19 @@ function filter(source, baseIRI, authorisations, newSource) {
             writer.end((error, result) => {
                 fs.writeFile(newSource, result, err => {
                     if (err) {throw 'Could not write out the file ' + err};
-                    console.log(`${newSource} was saved`);
-                    filteredFile = newSource;
+                    //console.log(`${newSource} was saved`);
+                    filteredFiles.push(newSource);
                 }); 
             });
         }
-        
     });
 }
 
 // ## Deleting filtered file 
 function cleaner(newSource) {
-    try {
-        fs.unlinkSync(newSource);
-        console.log(`${newSource} was removed`);
-    }
-    catch(err) {console.error(`File '${source}' not found :\n` + err)}
+    fs.unlink(newSource, function(err){
+        if(err) return; //
+        //console.log(`${newSource} was removed`);
+    });
 }
 

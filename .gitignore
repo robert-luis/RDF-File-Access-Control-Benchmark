@@ -1,5 +1,8 @@
 src/node_modules
+src/output
 .ipynb_checkpoints
+other
+
 
 src/data/*
 !src/data/t1/

@@ -2,30 +2,51 @@
 	"data": {
 		"t1": {
 			"t1-1": {
-				"pods": 10,
+				"pods": 1000,
 				"posts": 10,
 				"auths": 1
 			},
             "t1-2": {
-				"pods": 10,
+				"pods": 900,
 				"posts": 10,
 				"auths": 2
 			},
             "t1-3": {
-				"pods": 10,
+				"pods": 800,
 				"posts": 10,
 				"auths": 3
 			}
 		},
 		"t2": {
 			"t2-1": {
-				"pods": 10,
+				"pods": 5,
 				"posts": 10,
 				"auths": 1
+			},
+            "t2-2": {
+				"pods": 50,
+				"posts": 10,
+				"auths": 2
+			},
+            "t2-3": {
+				"pods": 100,
+				"posts": 10,
+				"auths": 3
 			}
 		}
 	},
     "port": 8080,
-    "runs": 3,
-    "queries": ".."
+    "runs": 2,
+    "queries": {
+        "q1": {
+            "complete": " PREFIX foaf: <http://xmlns.com/foaf/0.1/> SELECT ?o WHERE { graph ?g { ?s foaf:knows ?o. } }",
+            "subQ1": " PREFIX foaf: <http://xmlns.com/foaf/0.1/> SELECT ?o WHERE { graph ?g { ?s foaf:knows ?o. } }",
+            "subQ2": " PREFIX foaf: <http://xmlns.com/foaf/0.1/> SELECT ?o WHERE { graph ?g { ?friend foaf:name ?o. } }"
+        },
+        "q2": {
+            "complete": " PREFIX foaf: <http://xmlns.com/foaf/0.1/> SELECT ?o WHERE { graph ?g { ?s foaf:knows ?o. } }",
+            "subQ1": " PREFIX foaf: <http://xmlns.com/foaf/0.1/> SELECT ?o WHERE { graph ?g { ?s foaf:knows ?o. } }",
+            "subQ2": " PREFIX sioc: <http://rdfs.org/sioc/ns#> SELECT ?o WHERE { graph ?g { ?friend sioc:UserAccount ?user. ?user sioc:creator_of ?o. } }"
+        }
+    }
 }
