@@ -3,51 +3,37 @@
 const fetch = require('node-fetch');
 const newEngine = require('@comunica/actor-init-sparql').newEngine;
 
-//// ## Initialising the request
-//requestHandler(source, webid, query).then(res => {
-//    console.log(res);
-//})
-//.catch(err=> {console.error('Error! Server is not responding \n' + err) });
-
 
 module.exports = {
-    queryHandler: async function (source, webid, query) {
+    // ## Handles the splitted query and and result accumulation in a basic way
+    queryHandler: async function (source, webid, query, acEnforce) {
         var results = [];
-        var int_result = await requestHandler(source, webid, query[0])
+        var int_result = await requestHandler(source, webid, query[0], acEnforce);
         for (i in int_result) {
-            results.push(await requestHandler(int_result[i], webid, query[1]))
+            results.push(await requestHandler(int_result[i], webid, query[1], acEnforce));
         }
-        return results
+        return results;
     }
 }
 
-
-// Exporting the main function
-//module.exports = {
-//    // ## Request handler function
-//    requestHandler: async function (source, webid, query) {
-//        //console.log(test);
-//        console.log(source);
-////        console.log(webid);
-////        console.log(query);
-//        const newSource = await enforceAC(source, webid, query);
-//        if (newSource.length > 0) {
-//            const results = await executeQuery(query, source);
-//            callCleaner(newSource)
-//            return results
-//        } else { return [] }
-//    }
-//}
-
 // ## Request handler function
-async function requestHandler(source, webid, query) {
-    const newSource = await enforceAC(source, webid, query);
-    if (newSource.length > 0) {
-        const results = await executeQuery(query, source);
-        callCleaner(newSource)
-        return results
-    } else { return [] }
+async function requestHandler(source, webid, query, acEnforce) {
+    // ## Checking whether to enforce AC or to query directly
+    if (acEnforce == true) {
+        var newSource = await enforceAC(source, webid, query);
+        if (newSource.length < 1) {
+            return [];
+        }
+    } else {
+        var newSource = source;
+    }
+    const results = await executeQuery(query, newSource);
+    if (acEnforce == true) {
+        callCleaner(newSource);
+    }
+    return results;       
 }
+
 
 // ## Calling the AC-Interface
 async function enforceAC(url, webid, query) {
@@ -75,7 +61,9 @@ async function executeQuery(query, source) {
     const results = [];
     result.bindingsStream.on('data', data => {
         // ## given variable to retrieve instead of ?o
+        //results.push(data.get('?o').value);
         results.push(data.get('?o').value);
+        //console.log(data)
     });
     return new Promise(resolve => {
         result.bindingsStream.on('end', () => {

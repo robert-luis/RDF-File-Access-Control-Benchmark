@@ -1,4 +1,5 @@
 // ** Server of Graph-based Access Control for RDF Files **
+
 const express = require('express');
 const newEngine = require('@comunica/actor-init-sparql').newEngine;
 const N3 = require('n3');
@@ -17,10 +18,12 @@ const path = process.cwd()
 var filteredFiles = [];     // store for logging filtered files
 rand.initState();           // seed for random number
 
+
 // ## Server application
 app.listen(port, () => console.log(`Server is running on port ${port}!`));
 app.use(express.static(path + '/data'));
 app.use(express.json())
+
 
 // ## AC-Interface
 app.post('/*', (req, res) => {
@@ -38,15 +41,11 @@ app.post('/*', (req, res) => {
         for (i in filteredFiles){
             // ## Check whether the requested resource was created by the filter function
             if (filteredFiles[i].match(req.url)) {
-                 // ## Delete the file
-                setTimeout(() => cleaner(filteredFiles[i]), 1000); 
-                
                 cleaner(filteredFiles[i]);
             }
         }
     } else {res.send('Something went wrong!');}
 });
-
 
 
 // ## AC-Interface
@@ -66,14 +65,15 @@ async function checkAP(req) {
     //const acc = await getAccessMode(query) | currently only read supported
     //const policyQuery = await createQuery(acc) |  not necessarry anymore
     
-    // Storing the policy document in a memory store
+    // ## Storing the policy document in a memory store
     authStore = await getAuthData(aclSource, baseIRI);
     
-    // Retrieving the authorised named graphs depending on read access and requester's webid
+    // ## Retrieving the authorised named graphs depending on read access and requester's webid
     authorisations = await getAuthGraphs(authStore, webid);
     
+    // ## If no authorisations were found, return an empty list
     if (authorisations.length > 0) {
-        // Creating filtered file
+        // ## Creating filtered file
         filter(source, baseIRI, authorisations, newSource);
         return newbaseIRI;
     } else { 
@@ -127,23 +127,14 @@ async function getAuthGraphs(store, webid) {
     const engine_rdfjs = newEngine_rdfjs();
     
     // ToDo: Match access mode Read against query
-//    const authQuery = `
-//    PREFIX acl: <http://www.w3.org/ns/auth/acl#>
-//    PREFIX ppo: <http://vocab.deri.ie/ppo#>
-//    SELECT ?o WHERE {GRAPH ?g {
-//        ?s acl:mode acl:Read.
-//        ?s acl:agent <${webid}>.
-//        ?s ppo:appliesToNamedGraph ?o.
-//    }}`;
-
     const authQuery = `
     PREFIX acl: <http://www.w3.org/ns/auth/acl#>
     PREFIX ppo: <http://vocab.deri.ie/ppo#>
     SELECT ?o WHERE {GRAPH ?g {
         ?s acl:mode acl:Read.
+        ?s acl:agent <${webid}>.
         ?s ppo:appliesToNamedGraph ?o.
     }}`;
- 
  
     const authGraphs = []
     const result = await engine_rdfjs.query(authQuery, { sources: [ { type: 'rdfjsSource', value: store } ] });

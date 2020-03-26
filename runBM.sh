@@ -14,13 +14,16 @@ ipython data_generator.ipynb
 echo "  -The data sets were generated."
 
 ## Call js wrapper
-#call
 echo "  -Begin querying..."
+cd src
+node wrapper.js
+echo "  -...Querying succeeded."
+cd ..
 
 ## Call validator??
 ## Call output_processer
 ## done
 
 echo ""
-echo "*** Done ***"
+echo "*** Benchmark completed ***"
 echo ""
