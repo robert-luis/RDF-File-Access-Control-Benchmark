@@ -2,10 +2,10 @@
 	"data": {
 		"t1": {
 			"t1-1": {
-				"pods": 3,
+				"pods": 2,
 				"posts": 4,
-				"auths": 2,
-                "acEnforce": false
+				"auths": 1,
+                "acEnforce": true
 			}
 		}
 	},
@@ -25,7 +25,7 @@
         "q3": {
             "complete": "PREFIX foaf: <http://xmlns.com/foaf/0.1/> PREFIX sioc: <http://rdfs.org/sioc/ns#> PREFIX dct: <http://purl.org/dc/terms/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT ?o WHERE { graph ?g { ?s foaf:knows ?o. } } { graph ?g2 { ?friend sioc:UserAccount ?user. ?user sioc:creator_of ?post.} } { graph ?g3 { ?post sioc:content ?o. ?post dct:created ?date. FILTER(?date > '2017-01-01'^^xsd:date ) }}}",
             "subQ1": " PREFIX foaf: <http://xmlns.com/foaf/0.1/> SELECT ?o WHERE { graph ?g { ?s foaf:knows ?o. } }",
-            "subQ2": "PREFIX sioc: <http://rdfs.org/sioc/ns#> PREFIX dct: <http://purl.org/dc/terms/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT ?o WHERE { { graph ?g { ?friend sioc:UserAccount ?user. ?user sioc:creator_of ?post.} } { graph ?g2 {?post sioc:content ?o. ?post dct:created ?date. FILTER(?date > '2017-01-01'^^xsd:date ) }}}"
+            "subQ2": "PREFIX sioc: <http://rdfs.org/sioc/ns#> PREFIX dct: <http://purl.org/dc/terms/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT ?o WHERE { { graph ?g { ?friend sioc:UserAccount ?user. ?user sioc:creator_of ?post.} } { graph ?g2 {?post sioc:content ?o. ?post dct:created ?date. FILTER(?date > '2020-03-21'^^xsd:date ) }}}"
         }
     }
 }

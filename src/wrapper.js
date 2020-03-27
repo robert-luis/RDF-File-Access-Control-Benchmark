@@ -4,9 +4,11 @@ const fs = require('fs');
 const cl = require('./bin/client.js');
 
 // ## Configuration file
-//const config = JSON.parse(fs.readFileSync('config.json'));
-// # in case of calling wrapper manually:
 const config = JSON.parse(fs.readFileSync('../config.json')); 
+
+
+// ## Check whether server has been started
+
 
 // ## Iterations | runs -> queries -> subtasks -> tasks
 for (var run = 1; run <= config.runs; run++) {

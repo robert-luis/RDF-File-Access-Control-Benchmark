@@ -61,9 +61,7 @@ async function executeQuery(query, source) {
     const results = [];
     result.bindingsStream.on('data', data => {
         // ## given variable to retrieve instead of ?o
-        //results.push(data.get('?o').value);
         results.push(data.get('?o').value);
-        //console.log(data)
     });
     return new Promise(resolve => {
         result.bindingsStream.on('end', () => {
