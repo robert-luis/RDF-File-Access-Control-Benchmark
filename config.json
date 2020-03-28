@@ -4,13 +4,105 @@
 			"t1-1": {
 				"pods": 2,
 				"posts": 4,
+				"auths": 3,
+                "acEnforce": true
+			},
+            "t1-2": {
+				"pods": 4,
+				"posts": 4,
+				"auths": 3,
+                "acEnforce": true
+			},
+            "t1-3": {
+				"pods": 8,
+				"posts": 4,
+				"auths": 3,
+                "acEnforce": true
+			}
+		},
+		"t2": {
+			"t2-1": {
+				"pods": 2,
+				"posts": 4,
+				"auths": 3,
+                "acEnforce": false
+			},
+            "t2-2": {
+				"pods": 4,
+				"posts": 4,
+				"auths": 3,
+                "acEnforce": false
+			},
+            "t2-3": {
+				"pods": 8,
+				"posts": 4,
+				"auths": 3,
+                "acEnforce": false
+			}
+		},
+		"t3": {
+			"t3-1": {
+				"pods": 4,
+				"posts": 2,
+				"auths": 3,
+                "acEnforce": true
+			},
+            "t3-2": {
+				"pods": 4,
+				"posts": 4,
+				"auths": 3,
+                "acEnforce": true
+			},
+            "t3-3": {
+				"pods": 4,
+				"posts": 8,
+				"auths": 3,
+                "acEnforce": true
+			}
+		},
+		"t4": {
+			"t4-1": {
+				"pods": 4,
+				"posts": 2,
+				"auths": 3,
+                "acEnforce": false
+			},
+            "t4-2": {
+				"pods": 4,
+				"posts": 4,
+				"auths": 3,
+                "acEnforce": false
+			},
+            "t4-3": {
+				"pods": 4,
+				"posts": 8,
+				"auths": 3,
+                "acEnforce": false
+			}
+		},
+		"t5": {
+			"t5-1": {
+				"pods": 4,
+				"posts": 4,
+				"auths": 3,
+                "acEnforce": true
+			},
+            "t5-2": {
+				"pods": 4,
+				"posts": 4,
+				"auths": 2,
+                "acEnforce": true
+			},
+            "t5-3": {
+				"pods": 4,
+				"posts": 4,
 				"auths": 1,
                 "acEnforce": true
 			}
 		}
 	},
     "port": 8080,
-    "runs": 1,
+    "runs": 3,
     "queries": {
         "q1": {
             "complete": "PREFIX foaf: <http://xmlns.com/foaf/0.1/> SELECT ?o WHERE { graph ?g { ?s foaf:knows ?friend. ?friend foaf:name ?o.} }",

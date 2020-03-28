@@ -1,7 +1,8 @@
 src/node_modules
 src/output
-.ipynb_checkpoints
+results
 other
+.ipynb_checkpoints
 
 
 src/data/*

@@ -7,6 +7,7 @@ echo ""
 ## Clear src/data and output (and src/output?)
 rm -r src/data/*
 rm -r src/output/*
+rm -r src/results/*
 echo "  -The data folder was cleaned."
 
 ## Call datagenerator
@@ -17,12 +18,11 @@ echo "  -The data sets were generated."
 echo "  -Begin querying..."
 cd src
 node wrapper.js
-echo "  -...Querying succeeded."
+echo "   ...Querying succeeded."
 cd ..
 
-## Call validator??
 ## Call output_processer
-## done
+ipython output_processor.ipynb
 
 echo ""
 echo "*** Benchmark completed ***"
