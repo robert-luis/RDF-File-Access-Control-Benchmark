@@ -2,131 +2,107 @@
 	"data": {
 		"t1": {
 			"t1-1": {
-				"pods": 2,
-				"posts": 10,
+				"pods": 10,
+				"posts": 100,
 				"auths": 3,
                 "acEnforce": true
 			},
             "t1-2": {
-				"pods": 8,
-				"posts": 10,
+				"pods": 100,
+				"posts": 100,
 				"auths": 3,
                 "acEnforce": true
 			},
             "t1-3": {
-				"pods": 32,
-				"posts": 10,
-				"auths": 3,
-                "acEnforce": true
-			},
-            "t1-4": {
-				"pods": 128,
-				"posts": 10,
+				"pods": 1000,
+				"posts": 100,
 				"auths": 3,
                 "acEnforce": true
 			}
 		},
 		"t2": {
 			"t2-1": {
-				"pods": 2,
-				"posts": 10,
+				"pods": 10,
+				"posts": 100,
 				"auths": 3,
                 "acEnforce": false
 			},
             "t2-2": {
-				"pods": 8,
-				"posts": 10,
+				"pods": 100,
+				"posts": 100,
 				"auths": 3,
                 "acEnforce": false
 			},
             "t2-3": {
-				"pods": 32,
-				"posts": 10,
-				"auths": 3,
-                "acEnforce": false
-			},
-            "t2-4": {
-				"pods": 128,
-				"posts": 10,
+				"pods": 1000,
+				"posts": 100,
 				"auths": 3,
                 "acEnforce": false
 			}
 		},
 		"t3": {
 			"t3-1": {
-				"pods": 10,
-				"posts": 2,
+				"pods": 100,
+				"posts": 10,
 				"auths": 3,
                 "acEnforce": true
 			},
             "t3-2": {
-				"pods": 10,
-				"posts": 8,
+				"pods": 100,
+				"posts": 100,
 				"auths": 3,
                 "acEnforce": true
 			},
             "t3-3": {
-				"pods": 10,
-				"posts": 32,
-				"auths": 3,
-                "acEnforce": true
-			},
-            "t3-4": {
-				"pods": 10,
-				"posts": 128,
+				"pods": 100,
+				"posts": 1000,
 				"auths": 3,
                 "acEnforce": true
 			}
 		},
 		"t4": {
 			"t4-1": {
-				"pods": 10,
-				"posts": 2,
+				"pods": 100,
+				"posts": 10,
 				"auths": 3,
                 "acEnforce": false
 			},
             "t4-2": {
-				"pods": 10,
-				"posts": 8,
+				"pods": 100,
+				"posts": 100,
 				"auths": 3,
                 "acEnforce": false
 			},
             "t4-3": {
-				"pods": 10,
-				"posts": 32,
-				"auths": 3,
-                "acEnforce": false
-			},
-            "t4-4": {
-				"pods": 10,
-				"posts": 128,
+				"pods": 100,
+				"posts": 1000,
 				"auths": 3,
                 "acEnforce": false
 			}
 		},
 		"t5": {
 			"t5-1": {
-				"pods": 10,
-				"posts": 10,
-				"auths": 1,
+				"pods": 100,
+				"posts": 100,
+				"auths": 3,
                 "acEnforce": true
 			},
             "t5-2": {
-				"pods": 10,
-				"posts": 10,
+				"pods": 100,
+				"posts": 100,
 				"auths": 2,
                 "acEnforce": true
 			},
             "t5-3": {
-				"pods": 10,
-				"posts": 10,
-				"auths": 3,
+				"pods": 100,
+				"posts": 100,
+				"auths": 1,
                 "acEnforce": true
 			}
 		}
 	},
     "port": 8080,
-    "runs": 20,
+    "runs": 5,
     "queries": {
         "q1": {
             "complete": "PREFIX foaf: <http://xmlns.com/foaf/0.1/> SELECT ?o WHERE { graph ?g { ?s foaf:knows ?friend. ?friend foaf:name ?o.} }",

@@ -8,7 +8,7 @@ module.exports = {
     // ## Handles the splitted query and and result accumulation in a basic way
     queryHandler: async function (source, webid, query, acEnforce) {
         var results = [];
-        var int_result = await requestHandler(source, webid, query[0], acEnforce);
+        let int_result = await requestHandler(source, webid, query[0], acEnforce);
         for (i in int_result) {
             results.push(await requestHandler(int_result[i], webid, query[1], acEnforce));
         }
@@ -20,7 +20,7 @@ module.exports = {
 async function requestHandler(source, webid, query, acEnforce) {
     // ## Checking whether to enforce AC or to query directly
     if (acEnforce == true) {
-        var newSource = await enforceAC(source, webid, query);
+        var newSource = await sendRequest(source, webid, query);
         if (newSource.length < 1) {
             return [];
         }
@@ -36,7 +36,7 @@ async function requestHandler(source, webid, query, acEnforce) {
 
 
 // ## Calling the AC-Interface
-async function enforceAC(url, webid, query) {
+async function sendRequest(url, webid, query) {
     url = url;
     const data = {'webid': webid, 
                   'query': query};
@@ -51,6 +51,7 @@ async function enforceAC(url, webid, query) {
     return newSource
 }
 
+
 // Executing the query
 async function executeQuery(query, source) {
     const engine = newEngine();
@@ -59,9 +60,13 @@ async function executeQuery(query, source) {
     ];
     const result = await engine.query(query, { sources });
     const results = [];
-    result.bindingsStream.on('data', data => {
+    result.bindingsStream.on('data', (data, error) => {
         // ## given variable to retrieve instead of ?o
+        if (data) {
         results.push(data.get('?o').value);
+        }
+        if (error) {console.log('executeQuery() failure')}
+        
     });
     return new Promise(resolve => {
         result.bindingsStream.on('end', () => {
@@ -69,6 +74,7 @@ async function executeQuery(query, source) {
         })
     });
 }
+
 
 // ## Calling the cleaner on the AC-Interface
 function callCleaner(newSource) {

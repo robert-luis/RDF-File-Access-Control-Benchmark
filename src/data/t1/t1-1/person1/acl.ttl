@@ -7,13 +7,15 @@
     acl:mode acl:Read;
     acl:mode acl:Write;
     acl:agent <http://localhost:8080/t1/t1-1/person1/profile.ttl#me>;
-    ppo:appliesToNamedGraph <http://localhost:8080/t1/t1-1/person1/profile.ttl#Card>;
-    ppo:appliesToNamedGraph <http://localhost:8080/t1/t1-1/person1/profile.ttl#MbPrivate>;
-    ppo:appliesToNamedGraph <http://localhost:8080/t1/t1-1/person1/profile.ttl#MbOfficial>.
+    ppo:appliesToNamedGraph <http://localhost:8080/t1/t1-1/person1/profile.ttl#Card>,
+        <http://localhost:8080/t1/t1-1/person1/profile.ttl#MbPrivate>,
+        <http://localhost:8080/t1/t1-1/person1/profile.ttl#MbOfficial>.
 
 :aclOther a acl:Authorization;
     acl:mode acl:Read;
     acl:agent <http://localhost:8080/t1/t1-1/person0/profile.ttl#me>;
     acl:agent <http://localhost:8080/t1/t1-1/person1/profile.ttl#me>;
-    ppo:appliesToNamedGraph <http://localhost:8080/t1/t1-1/person1/profile.ttl#Card>.
+    ppo:appliesToNamedGraph <http://localhost:8080/t1/t1-1/person1/profile.ttl#Card>,
+        <http://localhost:8080/t1/t1-1/person1/profile.ttl#MbPrivate>,
+        <http://localhost:8080/t1/t1-1/person1/profile.ttl#MbOfficial>.
 }

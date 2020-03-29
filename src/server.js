@@ -28,15 +28,14 @@ app.use(express.json())
 // ## AC-Interface
 app.post('/*', (req, res) => {
     if (req.body.hasOwnProperty('webid') && req.body.hasOwnProperty('query'))  {
-        //console.log('P1') // Tracking of path made by request
-        resData = checkAP(req).then(result => {
+//        resData = checkAP(req).then(result => {
+        checkAP(req).then(result => {
             res.json({
                 input: req.body,
                 newSource: result
             });
         });
     } else if (req.body.hasOwnProperty('cleaner')) {
-        //console.log('P2')
         res.send('Cleaning call received!');
         for (i in filteredFiles){
             // ## Check whether the requested resource was created by the filter function
@@ -51,7 +50,7 @@ app.post('/*', (req, res) => {
 // ## AC-Interface
 async function checkAP(req) {
     
-    const rand_num = rand(1000000);
+    const rand_num = rand(1000000000);
     
     const source = path + '/data' + req.url;
     const newSource = getNewPath(source, rand_num);
@@ -66,10 +65,10 @@ async function checkAP(req) {
     //const policyQuery = await createQuery(acc) |  not necessarry anymore
     
     // ## Storing the policy document in a memory store
-    authStore = await getAuthData(aclSource, baseIRI);
+    const authStore = await getAuthData(aclSource, baseIRI);
     
     // ## Retrieving the authorised named graphs depending on read access and requester's webid
-    authorisations = await getAuthGraphs(authStore, webid);
+    const authorisations = await getAuthGraphs(authStore, webid);
     
     // ## If no authorisations were found, return an empty list
     if (authorisations.length > 0) {
@@ -94,9 +93,9 @@ function getNewPath(str, rand) {
 }
 
 // ## Retrieving the respectice acl file for the requested source
-function getAclSource(source) {
-    dir = source.slice(0, source.lastIndexOf('/') + 1);
-    options = {cwd: dir};
+const getAclSource = async (source) => {
+    const dir = source.slice(0, source.lastIndexOf('/') + 1);
+    const options = {cwd: dir};
     return new Promise((resolve, reject) => {
         glob("*acl.ttl", options, function(err, doc) {
             if (err) {
@@ -109,23 +108,27 @@ function getAclSource(source) {
 }
 
 // ## Parsing the auth document into a store
-function getAuthData(source, baseIRI) {
-    var authStore = new N3.Store();
+ const getAuthData = async (source, baseIRI) => {
+    const authStore = new N3.Store();
     const parser = new N3.Parser( { baseIRI: baseIRI } ),
           rdfStream = fs.createReadStream(source);
     return new Promise((resolve, reject) => {
         parser.parse(rdfStream, (err, quad, prefixes) => {
             if (err) {throw err}
-            if (quad) {authStore.addQuad(quad)}
-            else {resolve(authStore)}
+            if (quad) {
+                authStore.addQuad(quad);
+                //console.log(quad.subject.value)
+            }
+            else {
+//                console.log('\n\n\n\n');
+                resolve(authStore)}
         });
     });
 }
 
 // ## Querying the authorised graphs from the store
-async function getAuthGraphs(store, webid) {
+const getAuthGraphs = async (store, webid) => {
     const engine_rdfjs = newEngine_rdfjs();
-    
     // ToDo: Match access mode Read against query
     const authQuery = `
     PREFIX acl: <http://www.w3.org/ns/auth/acl#>
@@ -135,7 +138,7 @@ async function getAuthGraphs(store, webid) {
         ?s acl:agent <${webid}>.
         ?s ppo:appliesToNamedGraph ?o.
     }}`;
- 
+    
     const authGraphs = []
     const result = await engine_rdfjs.query(authQuery, { sources: [ { type: 'rdfjsSource', value: store } ] });
     result.bindingsStream.on('data', (data) => {
@@ -144,7 +147,7 @@ async function getAuthGraphs(store, webid) {
     return new Promise(resolve => {
         result.bindingsStream.on('end', () => {
             resolve(authGraphs);
-        })
+        });
     });
 }
 

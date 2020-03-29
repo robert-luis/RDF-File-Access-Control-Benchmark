@@ -18,6 +18,12 @@
     sioc:creator_of :post1;
     sioc:creator_of :post2;
     sioc:creator_of :post3;
+    sioc:creator_of :post4;
+    sioc:creator_of :post5;
+    sioc:creator_of :post6;
+    sioc:creator_of :post7;
+    sioc:creator_of :post8;
+    sioc:creator_of :post9;
     sioct:Microblog :MbPrivate;
     sioct:Microblog :MbOfficial.
 }
@@ -26,24 +32,54 @@
 :post0
     a sioct:MicroblogPost;
     sioc:content "P0: Nihil agere delectat.";
-    dct:created "2020-03-27"^^xsd:date;
-    sioc:topic <http://example.org/topics/hcls>.
+    dct:created "2020-03-30"^^xsd:date;
+    sioc:topic 'private'.
 :post1
     a sioct:MicroblogPost;
     sioc:content "P1: Nihil agere delectat.";
-    dct:created "2020-03-20"^^xsd:date;
-    sioc:topic <http://example.org/topics/hcls>.
+    dct:created "2020-03-23"^^xsd:date;
+    sioc:topic 'private'.
+:post2
+    a sioct:MicroblogPost;
+    sioc:content "P2: Nihil agere delectat.";
+    dct:created "2020-03-16"^^xsd:date;
+    sioc:topic 'private'.
+:post3
+    a sioct:MicroblogPost;
+    sioc:content "P3: Nihil agere delectat.";
+    dct:created "2020-03-09"^^xsd:date;
+    sioc:topic 'private'.
+:post4
+    a sioct:MicroblogPost;
+    sioc:content "P4: Nihil agere delectat.";
+    dct:created "2020-03-02"^^xsd:date;
+    sioc:topic 'private'.
 }
 
 :MbOfficial {
-:post2
+:post5
     a sioct:MicroblogPost;
-    sioc:content "P2: Cum tacent, clamant.";
-    dct:created "2020-03-27"^^xsd:date;
-    sioc:topic <http://example.org/topics/hcls>.
-:post3
+    sioc:content "P5: Cum tacent, clamant.";
+    dct:created "2020-03-30"^^xsd:date;
+    sioc:topic 'official'.
+:post6
     a sioct:MicroblogPost;
-    sioc:content "P3: Cum tacent, clamant.";
-    dct:created "2020-03-20"^^xsd:date;
-    sioc:topic <http://example.org/topics/hcls>.
+    sioc:content "P6: Cum tacent, clamant.";
+    dct:created "2020-03-23"^^xsd:date;
+    sioc:topic 'official'.
+:post7
+    a sioct:MicroblogPost;
+    sioc:content "P7: Cum tacent, clamant.";
+    dct:created "2020-03-16"^^xsd:date;
+    sioc:topic 'official'.
+:post8
+    a sioct:MicroblogPost;
+    sioc:content "P8: Cum tacent, clamant.";
+    dct:created "2020-03-09"^^xsd:date;
+    sioc:topic 'official'.
+:post9
+    a sioct:MicroblogPost;
+    sioc:content "P9: Cum tacent, clamant.";
+    dct:created "2020-03-02"^^xsd:date;
+    sioc:topic 'official'.
 }
