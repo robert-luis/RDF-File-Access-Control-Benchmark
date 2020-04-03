@@ -19,19 +19,23 @@ module.exports = {
 // ## Request handler function
 async function requestHandler(source, webid, query, acEnforce) {
     // ## Checking whether to enforce AC or to query directly
-    if (acEnforce == true) {
-        var newSource = await sendRequest(source, webid, query);
-        if (newSource.length < 1) {
-            return [];
+    try {
+        if (acEnforce == true) {
+            var newSource = await sendRequest(source, webid, query);
+            if (newSource.length < 1) {
+                return [];
+            }
+        } else {
+            var newSource = source;
         }
-    } else {
-        var newSource = source;
+        const results = await executeQuery(query, newSource);
+        if (acEnforce == true) {
+            callCleaner(newSource);
+        }
+        return results;       
+    } catch(e) {
+        consol.log(e.message)
     }
-    const results = await executeQuery(query, newSource);
-    if (acEnforce == true) {
-        callCleaner(newSource);
-    }
-    return results;       
 }
 
 
@@ -45,34 +49,44 @@ async function sendRequest(url, webid, query) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)    
     };
-    const response = await fetch(url, options);
-    const respone_json = await response.json();
-    const newSource = respone_json.newSource;
-    return newSource
+    try{
+        const response = await fetch(url, options);
+        const respone_json = await response.json();
+        const newSource = respone_json.newSource;
+        return newSource
+    } catch(e) {
+        consol.log(e.message, ' inside sendRequest')
+    } 
 }
 
 
 // Executing the query
 async function executeQuery(query, source) {
-    const engine = newEngine();
-    const sources = [
-        { type: "file", value: source },
-    ];
-    const result = await engine.query(query, { sources });
-    const results = [];
-    result.bindingsStream.on('data', (data, error) => {
-        // ## given variable to retrieve instead of ?o
-        if (data) {
-        results.push(data.get('?o').value);
-        }
-        if (error) {console.log('executeQuery() failure')}
-        
-    });
-    return new Promise(resolve => {
-        result.bindingsStream.on('end', () => {
-            resolve(results);
-        })
-    });
+    try {
+        const engine = newEngine();
+        const sources = [
+            { type: "file", value: source },
+        ];
+        const result = await engine.query(query, { sources });
+        const results = [];
+        result.bindingsStream.on('data', (data, error) => {
+            // ## given variable to retrieve instead of ?o
+            if (data) {
+                results.push(data.get('?o').value)
+            }
+            if (error) {
+                console.log(error.message, 'executeQuery() failure')
+            }
+            
+        });
+        return new Promise(resolve => {
+            result.bindingsStream.on('end', () => {
+                resolve(results);
+            });
+        }); 
+    } catch(e) {
+        consol.log(e.message, ' inside executeQuery()')
+    }
 }
 
 
@@ -85,7 +99,11 @@ function callCleaner(newSource) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)    
     };
-    fetch(url, options);
+    try {
+        fetch(url, options);
+    } catch(e) {
+        consol.log(e.message + 'inside callCleaner()')
+    }
 }
 
 

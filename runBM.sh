@@ -17,7 +17,19 @@ echo "  - The data sets were generated."
 ## Call js wrapper
 echo "  - Begin querying..."
 cd src
-node wrapper.js
+
+
+limit=$(node iterator.js request)
+
+#for i in {1..$((limit))}; do
+for (( c=1; c<=$limit; c++ )); do
+    var=$(node iterator.js $c)
+    NODE_ENV=production node wrapper.js $var
+  
+done
+
+
+#node wrapper.js
 echo "     ... "
 echo "  - Querying succeeded."
 cd ..

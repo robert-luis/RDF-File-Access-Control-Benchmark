@@ -7,6 +7,7 @@ const fs = require('fs');
 const newEngine_rdfjs = require('@comunica/actor-init-sparql-rdfjs').newEngine;
 const glob = require('glob');
 const rand = require('random-seed').create();
+const SparqlParser = require('sparqljs').Parser;
 
 
 
@@ -29,7 +30,9 @@ app.use(express.json())
 app.post('/*', (req, res) => {
     if (req.body.hasOwnProperty('webid') && req.body.hasOwnProperty('query'))  {
 //        resData = checkAP(req).then(result => {
+//        console.log('  -- Server P1')
         checkAP(req).then(result => {
+//            console.log(result)
             res.json({
                 input: req.body,
                 newSource: result
@@ -40,6 +43,7 @@ app.post('/*', (req, res) => {
         for (i in filteredFiles){
             // ## Check whether the requested resource was created by the filter function
             if (filteredFiles[i].match(req.url)) {
+                console.log('Cleaner Called')
                 cleaner(filteredFiles[i]);
             }
         }
@@ -68,13 +72,26 @@ async function checkAP(req) {
     const authStore = await getAuthData(aclSource, baseIRI);
     
     // ## Retrieving the authorised named graphs depending on read access and requester's webid
-    const authorisations = await getAuthGraphs(authStore, webid);
+    
+    
+    const authorisations = await getAuthGraphs(authStore, webid, query); //, 'acl:Read');
     
     // ## If no authorisations were found, return an empty list
     if (authorisations.length > 0) {
         // ## Creating filtered file
-        filter(source, baseIRI, authorisations, newSource);
-        return newbaseIRI;
+        await filter(source, baseIRI, authorisations, newSource);
+        return new Promise(resolve => {
+                resolve(newbaseIRI);
+        });
+//        return newbaseIRI;
+//        filter(source, baseIRI, authorisations, newSource, newbaseIRI).then(newbaseIRI => { 
+//            console.log(newbaseIRI)
+////            return new Promise(resolve => {
+////                
+////                resolve(newbaseIRI);
+////            });
+//        });
+        
     } else { 
         return [];
     }
@@ -93,7 +110,7 @@ function getNewPath(str, rand) {
 }
 
 // ## Retrieving the respectice acl file for the requested source
-const getAclSource = async (source) => {
+async function getAclSource(source) {
     const dir = source.slice(0, source.lastIndexOf('/') + 1);
     const options = {cwd: dir};
     return new Promise((resolve, reject) => {
@@ -108,7 +125,7 @@ const getAclSource = async (source) => {
 }
 
 // ## Parsing the auth document into a store
- const getAuthData = async (source, baseIRI) => {
+ async function getAuthData(source, baseIRI) {
     const authStore = new N3.Store();
     const parser = new N3.Parser( { baseIRI: baseIRI } ),
           rdfStream = fs.createReadStream(source);
@@ -117,7 +134,6 @@ const getAclSource = async (source) => {
             if (err) {throw err}
             if (quad) {
                 authStore.addQuad(quad);
-                //console.log(quad.subject.value)
             }
             else {
 //                console.log('\n\n\n\n');
@@ -127,9 +143,26 @@ const getAclSource = async (source) => {
 }
 
 // ## Querying the authorised graphs from the store
-const getAuthGraphs = async (store, webid) => {
+async function getAuthGraphs(store, webid, query) {
     const engine_rdfjs = newEngine_rdfjs();
-    // ToDo: Match access mode Read against query
+
+//    // Checking whether queryType equals 'SELECT'
+//    const sparql_pars = new SparqlParser();
+//    const parsedQuery = await sparql_pars.parse(query);
+//    if (parsedQuery.queryType == 'SELECT') {
+//        const accessMode = 'acl:Read';    
+//    } else {
+//        return [];
+//    }
+//    const authQuery = `
+//    PREFIX acl: <http://www.w3.org/ns/auth/acl#>
+//    PREFIX ppo: <http://vocab.deri.ie/ppo#>
+//    SELECT ?o WHERE {GRAPH ?g {
+//        ?s acl:mode ${accessMode}.
+//        ?s acl:agent <${webid}>.
+//        ?s ppo:appliesToNamedGraph ?o.
+//    }}`;
+    
     const authQuery = `
     PREFIX acl: <http://www.w3.org/ns/auth/acl#>
     PREFIX ppo: <http://vocab.deri.ie/ppo#>
@@ -152,29 +185,35 @@ const getAuthGraphs = async (store, webid) => {
 }
 
 // ## Writing out new filtered file
-function filter(source, baseIRI, authorisations, newSource) {
-    var writer = new N3.Writer();
+async function filter(source, baseIRI, authorisations, newSource) {
+    var writer = new N3.Writer({ format: 'application/trig' });
     const parser = new N3.Parser( { baseIRI: baseIRI } ),
           rdfStream = fs.createReadStream(source);
     parser.parse(rdfStream, (err, quad, prefixes) => {
         if (err) {throw err}
         // ## If graph of parsed quad matches the authorisations, it is added
         if (quad) {
+            var added = false
             for (auth in authorisations) {
-                if (authorisations[auth] == quad.graph.value){
+                if (authorisations[auth] == quad.graph.value & added == false){
                     writer.addQuad(quad);
+                    added = true;
                 }
             }
         }
         // ## Ending of the parsing and writing out
         else {
             writer.end((error, result) => {
-                fs.writeFile(newSource, result, err => {
+                fs.writeFileSync(newSource, result, err => {
                     if (err) {throw 'Could not write out the file ' + err};
                     //console.log(`${newSource} was saved`);
                     filteredFiles.push(newSource);
+                    return new Promise(resolve => {
+                        resolve(newSource)
+                    });
                 }); 
             });
+            
         }
     });
 }
@@ -183,7 +222,7 @@ function filter(source, baseIRI, authorisations, newSource) {
 function cleaner(newSource) {
     fs.unlink(newSource, function(err){
         if(err) return; //
-        //console.log(`${newSource} was removed`);
+//        console.log(`${newSource} was removed`);
     });
 }
 
