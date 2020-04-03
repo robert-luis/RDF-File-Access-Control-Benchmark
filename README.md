@@ -1,6 +1,8 @@
 ## Benchmark for Graph Based Access Control for RDF Files ##
 
 ### The Access Control Framework
+...
+see img/framework
 
 ### The Benchmark
 
