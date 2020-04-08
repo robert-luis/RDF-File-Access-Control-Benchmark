@@ -14,13 +14,13 @@
                 "acEnforce": true
 			},
             "t1-3": {
-				"pods": 32,
+				"pods": 16,
 				"posts": 10,
 				"auths": 3,
                 "acEnforce": true
 			},
             "t1-4": {
-				"pods": 128,
+				"pods": 32,
 				"posts": 10,
 				"auths": 3,
                 "acEnforce": true
@@ -40,13 +40,13 @@
                 "acEnforce": false
 			},
             "t2-3": {
-				"pods": 32,
+				"pods": 16,
 				"posts": 10,
 				"auths": 3,
                 "acEnforce": false
 			},
             "t2-4": {
-				"pods": 128,
+				"pods": 32,
 				"posts": 10,
 				"auths": 3,
                 "acEnforce": false
@@ -67,13 +67,13 @@
 			},
             "t3-3": {
 				"pods": 10,
-				"posts": 32,
+				"posts": 16,
 				"auths": 3,
                 "acEnforce": true
 			},
             "t3-4": {
 				"pods": 10,
-				"posts": 128,
+				"posts": 32,
 				"auths": 3,
                 "acEnforce": true
 			}
@@ -93,13 +93,13 @@
 			},
             "t4-3": {
 				"pods": 10,
-				"posts": 32,
+				"posts": 16,
 				"auths": 3,
                 "acEnforce": false
 			},
             "t4-4": {
 				"pods": 10,
-				"posts": 128,
+				"posts": 32,
 				"auths": 3,
                 "acEnforce": false
 			}
