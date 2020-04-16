@@ -32,27 +32,27 @@
 :post0
     a sioct:MicroblogPost;
     sioc:content "P0: Nihil agere delectat.";
-    dct:created "2020-03-31"^^xsd:date;
+    dct:created "2020-04-15"^^xsd:date;
     sioc:topic 'private'.
 :post1
     a sioct:MicroblogPost;
     sioc:content "P1: Nihil agere delectat.";
-    dct:created "2020-03-24"^^xsd:date;
+    dct:created "2020-04-08"^^xsd:date;
     sioc:topic 'private'.
 :post2
     a sioct:MicroblogPost;
     sioc:content "P2: Nihil agere delectat.";
-    dct:created "2020-03-17"^^xsd:date;
+    dct:created "2020-04-01"^^xsd:date;
     sioc:topic 'private'.
 :post3
     a sioct:MicroblogPost;
     sioc:content "P3: Nihil agere delectat.";
-    dct:created "2020-03-10"^^xsd:date;
+    dct:created "2020-03-25"^^xsd:date;
     sioc:topic 'private'.
 :post4
     a sioct:MicroblogPost;
     sioc:content "P4: Nihil agere delectat.";
-    dct:created "2020-03-03"^^xsd:date;
+    dct:created "2020-03-18"^^xsd:date;
     sioc:topic 'private'.
 }
 
@@ -60,26 +60,26 @@
 :post5
     a sioct:MicroblogPost;
     sioc:content "P5: Cum tacent, clamant.";
-    dct:created "2020-03-31"^^xsd:date;
+    dct:created "2020-04-15"^^xsd:date;
     sioc:topic 'official'.
 :post6
     a sioct:MicroblogPost;
     sioc:content "P6: Cum tacent, clamant.";
-    dct:created "2020-03-24"^^xsd:date;
+    dct:created "2020-04-08"^^xsd:date;
     sioc:topic 'official'.
 :post7
     a sioct:MicroblogPost;
     sioc:content "P7: Cum tacent, clamant.";
-    dct:created "2020-03-17"^^xsd:date;
+    dct:created "2020-04-01"^^xsd:date;
     sioc:topic 'official'.
 :post8
     a sioct:MicroblogPost;
     sioc:content "P8: Cum tacent, clamant.";
-    dct:created "2020-03-10"^^xsd:date;
+    dct:created "2020-03-25"^^xsd:date;
     sioc:topic 'official'.
 :post9
     a sioct:MicroblogPost;
     sioc:content "P9: Cum tacent, clamant.";
-    dct:created "2020-03-03"^^xsd:date;
+    dct:created "2020-03-18"^^xsd:date;
     sioc:topic 'official'.
 }

@@ -1,13 +1,13 @@
 {
-  "name": "benchmark",
+  "name": "Access control enforcement over RDF documents including benchmark",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Robert B.",
+  "license": "MIT",
   "dependencies": {
     "@comunica/actor-init-sparql": "^1.10.0",
     "@comunica/actor-init-sparql-rdfjs": "^1.10.0",
